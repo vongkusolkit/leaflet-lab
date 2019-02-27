@@ -20,7 +20,7 @@
             "year2013":98.50314082,
             "year2014":98.49870873,
             "year2015":98.49427664,
-            "Country Name":"Argentina"
+            "Country":"Argentina"
          },
          "geometry":{
             "type":"Point",
@@ -49,7 +49,7 @@
             "year2013":98.78088466,
             "year2014":98.79076818,
             "year2015":98.80065171,
-            "Country Name":"Australia"
+            "Country":"Australia"
          },
          "geometry":{
             "type":"Point",
@@ -78,7 +78,7 @@
             "year2013":44.60933599,
             "year2014":44.61486573,
             "year2015":44.62039546,
-            "Country Name":"Bangladesh"
+            "Country":"Bangladesh"
          },
          "geometry":{
             "type":"Point",
@@ -107,7 +107,7 @@
             "year2013":97.34877291,
             "year2014":97.40690273,
             "year2015":97.46503255,
-            "Country Name":"Brazil"
+            "Country":"Brazil"
          },
          "geometry":{
             "type":"Point",
@@ -136,7 +136,7 @@
             "year2013":44.54678469,
             "year2014":44.55440412,
             "year2015":44.56202356,
-            "Country Name":"Bhutan"
+            "Country":"Bhutan"
          },
          "geometry":{
             "type":"Point",
@@ -165,7 +165,7 @@
             "year2013":84.37203429,
             "year2014":84.37203429,
             "year2015":84.37203429,
-            "Country Name":"Botswana"
+            "Country":"Botswana"
          },
          "geometry":{
             "type":"Point",
@@ -194,7 +194,7 @@
             "year2013":98.38069358,
             "year2014":98.26739544,
             "year2015":98.15409731,
-            "Country Name":"Chile"
+            "Country":"Chile"
          },
          "geometry":{
             "type":"Point",
@@ -223,7 +223,7 @@
             "year2013":91.67227989,
             "year2014":91.48276147,
             "year2015":91.29324306,
-            "Country Name":"China"
+            "Country":"China"
          },
          "geometry":{
             "type":"Point",
@@ -252,7 +252,7 @@
             "year2013":65.14082581,
             "year2014":65.07485187,
             "year2015":65.00887794,
-            "Country Name":"Cote d'Ivoire"
+            "Country":"Cote d'Ivoire"
          },
          "geometry":{
             "type":"Point",
@@ -281,7 +281,7 @@
             "year2013":81.10248974,
             "year2014":80.99343114,
             "year2015":80.78893543,
-            "Country Name":"Colombia"
+            "Country":"Colombia"
          },
          "geometry":{
             "type":"Point",
@@ -310,7 +310,7 @@
             "year2013":83.6799331,
             "year2014":84.19807816,
             "year2015":84.69467801,
-            "Country Name":"Ecuador"
+            "Country":"Ecuador"
          },
          "geometry":{
             "type":"Point",
@@ -339,7 +339,7 @@
             "year2013":37.48631756,
             "year2014":37.66742575,
             "year2015":37.84853394,
-            "Country Name":"Ethiopia"
+            "Country":"Ethiopia"
          },
          "geometry":{
             "type":"Point",
@@ -368,7 +368,7 @@
             "year2013":42.50541008,
             "year2014":43.23673408,
             "year2015":43.97333748,
-            "Country Name":"Ghana"
+            "Country":"Ghana"
          },
          "geometry":{
             "type":"Point",
@@ -397,7 +397,7 @@
             "year2013":66.31783995,
             "year2014":68.36301662,
             "year2015":70.41986803,
-            "Country Name":"Gambia"
+            "Country":"Gambia"
          },
          "geometry":{
             "type":"Point",
@@ -426,7 +426,7 @@
             "year2013":99.92155962,
             "year2014":100,
             "year2015":100,
-            "Country Name":"Hong Kong SAR"
+            "Country":"Hong Kong SAR"
          },
          "geometry":{
             "type":"Point",
@@ -455,7 +455,7 @@
             "year2013":94.62751407,
             "year2014":94.50866996,
             "year2015":94.38982585,
-            "Country Name":"Iran"
+            "Country":"Iran"
          },
          "geometry":{
             "type":"Point",
@@ -484,7 +484,7 @@
             "year2013":99.39,
             "year2014":99.39,
             "year2015":99.39,
-            "Country Name":"Israel"
+            "Country":"Israel"
          },
          "geometry":{
             "type":"Point",
@@ -513,7 +513,7 @@
             "year2013":55.53788562,
             "year2014":55.01688051,
             "year2015":54.49827099,
-            "Country Name":"Kenya"
+            "Country":"Kenya"
          },
          "geometry":{
             "type":"Point",
@@ -542,7 +542,7 @@
             "year2013":90.85559172,
             "year2014":91.9495574,
             "year2015":92.72979479,
-            "Country Name":"Kyrgyz Republic"
+            "Country":"Kyrgyz Republic"
          },
          "geometry":{
             "type":"Point",
@@ -571,7 +571,7 @@
             "year2013":53.68340014,
             "year2014":54.48428504,
             "year2015":55.28516995,
-            "Country Name":"Cambodia"
+            "Country":"Cambodia"
          },
          "geometry":{
             "type":"Point",
@@ -600,7 +600,7 @@
             "year2013":76.9,
             "year2014":76.88,
             "year2015":76.86,
-            "Country Name":"Latin America & Caribbean"
+            "Country":"Latin America & Caribbean"
          },
          "geometry":{
             "type":"Point",
@@ -629,7 +629,7 @@
             "year2013":91.06195752,
             "year2014":91.83243913,
             "year2015":92.60394896,
-            "Country Name":"Sri Lanka"
+            "Country":"Sri Lanka"
          },
          "geometry":{
             "type":"Point",
@@ -658,7 +658,7 @@
             "year2013":92.31150549,
             "year2014":92.17481876,
             "year2015":92.03283364,
-            "Country Name":"Late-demographic dividend"
+            "Country":"Late-demographic dividend"
          },
          "geometry":{
             "type":"Point",
@@ -687,7 +687,7 @@
             "year2013":99.99878788,
             "year2014":100,
             "year2015":100,
-            "Country Name":"Macao SAR"
+            "Country":"Macao SAR"
          },
          "geometry":{
             "type":"Point",
@@ -716,7 +716,7 @@
             "year2013":88.40127999,
             "year2014":88.57752732,
             "year2015":88.75377465,
-            "Country Name":"Morocco"
+            "Country":"Morocco"
          },
          "geometry":{
             "type":"Point",
@@ -745,7 +745,7 @@
             "year2013":100,
             "year2014":100,
             "year2015":100,
-            "Country Name":"Monaco"
+            "Country":"Monaco"
          },
          "geometry":{
             "type":"Point",
@@ -774,7 +774,7 @@
             "year2013":82.97,
             "year2014":83.52,
             "year2015":84.06,
-            "Country Name":"Middle East & North Africa"
+            "Country":"Middle East & North Africa"
          },
          "geometry":{
             "type":"Point",
@@ -803,7 +803,7 @@
             "year2013":90.14421768,
             "year2014":90.14421768,
             "year2015":90.14421768,
-            "Country Name":"Macedonia"
+            "Country":"Macedonia"
          },
          "geometry":{
             "type":"Point",
@@ -832,7 +832,7 @@
             "year2013":99.59,
             "year2014":99.58,
             "year2015":99.57,
-            "Country Name":"North America"
+            "Country":"North America"
          },
          "geometry":{
             "type":"Point",
@@ -861,7 +861,7 @@
             "year2013":78.98302827,
             "year2014":79.07158712,
             "year2015":79.16014598,
-            "Country Name":"Nicaragua"
+            "Country":"Nicaragua"
          },
          "geometry":{
             "type":"Point",
@@ -890,7 +890,7 @@
             "year2013":33.98015395,
             "year2014":33.89259547,
             "year2015":33.80503699,
-            "Country Name":"Nepal"
+            "Country":"Nepal"
          },
          "geometry":{
             "type":"Point",
@@ -919,7 +919,7 @@
             "year2013":42.40523684,
             "year2014":41.56153228,
             "year2015":40.72367778,
-            "Country Name":"Pakistan"
+            "Country":"Pakistan"
          },
          "geometry":{
             "type":"Point",
@@ -948,7 +948,7 @@
             "year2013":58.12405383,
             "year2014":58.25329767,
             "year2015":58.38254151,
-            "Country Name":"Peru"
+            "Country":"Peru"
          },
          "geometry":{
             "type":"Point",
@@ -977,7 +977,7 @@
             "year2013":34.93660833,
             "year2014":35.65454132,
             "year2015":36.3764047,
-            "Country Name":"Rwanda"
+            "Country":"Rwanda"
          },
          "geometry":{
             "type":"Point",
@@ -1006,7 +1006,7 @@
             "year2013":100,
             "year2014":100,
             "year2015":100,
-            "Country Name":"Singapore"
+            "Country":"Singapore"
          },
          "geometry":{
             "type":"Point",
@@ -1035,7 +1035,7 @@
             "year2013":76.75052573,
             "year2014":76.93258297,
             "year2015":77.11464021,
-            "Country Name":"El Salvador"
+            "Country":"El Salvador"
          },
          "geometry":{
             "type":"Point",
@@ -1064,7 +1064,7 @@
             "year2013":46.06,
             "year2014":46.35,
             "year2015":46.65,
-            "Country Name":"Sub-Saharan Africa"
+            "Country":"Sub-Saharan Africa"
          },
          "geometry":{
             "type":"Point",
@@ -1093,7 +1093,7 @@
             "year2013":87.06913072,
             "year2014":87.56493394,
             "year2015":88.06073717,
-            "Country Name":"Eswatini"
+            "Country":"Eswatini"
          },
          "geometry":{
             "type":"Point",
@@ -1122,7 +1122,7 @@
             "year2013":91.50240458,
             "year2014":91.31633556,
             "year2015":91.13028507,
-            "Country Name":"East Asia & Pacific (IDA & IBRD countries)"
+            "Country":"East Asia & Pacific (IDA & IBRD countries)"
          },
          "geometry":{
             "type":"Point",
@@ -1151,7 +1151,7 @@
             "year2013":85.92451214,
             "year2014":85.72628,
             "year2015":85.51314,
-            "Country Name":"Turkmenistan"
+            "Country":"Turkmenistan"
          },
          "geometry":{
             "type":"Point",
@@ -1180,7 +1180,7 @@
             "year2013":33.00394195,
             "year2014":33.2856648,
             "year2015":33.56738765,
-            "Country Name":"Tanzania"
+            "Country":"Tanzania"
          },
          "geometry":{
             "type":"Point",
@@ -1209,7 +1209,7 @@
             "year2013":18.59399928,
             "year2014":18.05902704,
             "year2015":17.52262374,
-            "Country Name":"Uganda"
+            "Country":"Uganda"
          },
          "geometry":{
             "type":"Point",
@@ -1238,7 +1238,7 @@
             "year2013":94.38137182,
             "year2014":94.43833097,
             "year2015":94.49529012,
-            "Country Name":"Uruguay"
+            "Country":"Uruguay"
          },
          "geometry":{
             "type":"Point",
@@ -1267,7 +1267,7 @@
             "year2013":99.65306458,
             "year2014":99.65306458,
             "year2015":99.65306458,
-            "Country Name":"United States"
+            "Country":"United States"
          },
          "geometry":{
             "type":"Point",
@@ -1296,7 +1296,7 @@
             "year2013":86.5,
             "year2014":86.5,
             "year2015":86.5,
-            "Country Name":"Uzbekistan"
+            "Country":"Uzbekistan"
          },
          "geometry":{
             "type":"Point",
@@ -1325,7 +1325,7 @@
             "year2013":85.16,
             "year2014":85.16,
             "year2015":85.12,
-            "Country Name":"World"
+            "Country":"World"
          },
          "geometry":{
             "type":"Point",
@@ -1354,7 +1354,7 @@
             "year2013":86.55241273,
             "year2014":85.78876072,
             "year2015":85.02462945,
-            "Country Name":"South Africa"
+            "Country":"South Africa"
          },
          "geometry":{
             "type":"Point",
@@ -1383,7 +1383,7 @@
             "year2013":46.78909162,
             "year2014":46.64821214,
             "year2015":46.50659486,
-            "Country Name":"Zambia"
+            "Country":"Zambia"
          },
          "geometry":{
             "type":"Point",
