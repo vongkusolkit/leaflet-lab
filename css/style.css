@@ -8,7 +8,7 @@
 }
 
 /* Example 2.8: positioning the panel in style.css */
-#map {
+/* #map {
     height: 400px;
     width: 80%;
     display: inline-block;
@@ -19,10 +19,10 @@
     padding: 20px;
     display: inline-block;
     vertical-align: top;
-}
+} */
 
 /* Example 3.7: styles for slider and buttons in style.css */
-#panel {
+/* #panel {
     width: 26%;
     padding: 20px;
     display: inline-block;
@@ -41,4 +41,4 @@
 
 #reverse {
     float: left;
-}
+} */

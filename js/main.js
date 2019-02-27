@@ -21,83 +21,6 @@ function createMap(){
     getData(map);
 };
 
-// //function to retrieve the data and place it on the map
-// function getData(map){
-//
-//
-//   `filter`
-//   //Example 2.3 line 22...load the data
-//   $.ajax("data/drinkingwater.geojson", {
-//       dataType: "json",
-//       success: function(response){
-//         //create marker options
-//         var redColor = {
-//             radius: 8,
-//             fillColor: "#d73027",
-//             color: "#000",
-//             weight: 1,
-//             opacity: 1,
-//             fillOpacity: 0.8
-//         };
-//         // set new color
-//         var orangeColor = {
-//             radius: 8,
-//             fillColor: "#fdae61",
-//             color: "#000",
-//             weight: 1,
-//             opacity: 1,
-//             fillOpacity: 0.8
-//         };
-//         var yellowColor = {
-//             radius: 8,
-//             fillColor: "#ffffbf",
-//             color: "#000",
-//             weight: 1,
-//             opacity: 1,
-//             fillOpacity: 0.8
-//         };
-//         var blueColor = {
-//             radius: 8,
-//             fillColor: "#abd9e9",
-//             color: "#000",
-//             weight: 1,
-//             opacity: 1,
-//             fillOpacity: 0.8
-//         };
-//         var navyColor = {
-//             radius: 8,
-//             fillColor: "#2c7bb6",
-//             color: "#000",
-//             weight: 1,
-//             opacity: 1,
-//             fillOpacity: 0.8
-//         };
-//           //create a Leaflet GeoJSON layer and add it to the map
-//           L.geoJson(response, {
-//               pointToLayer: function (feature, latlng) {
-//                   if (feature.properties.year2015 <= 20){
-//                     return L.circleMarker(latlng, redColor);
-//                   }
-//                   if (feature.properties.year2015 > 20 && feature.properties.year2015 <= 40){
-//                     return L.circleMarker(latlng, orangeColor);
-//                   }
-//                   if (feature.properties.year2015 > 40 && feature.properties.year2015 <= 60){
-//                     return L.circleMarker(latlng, yellowColor);
-//                   }
-//                   if (feature.properties.year2015 > 60 && feature.properties.year2015 <= 80){
-//                     return L.circleMarker(latlng, blueColor);
-//                   }
-//                   if (feature.properties.year2015 > 80 && feature.properties.year2015 <= 100){
-//                     return L.circleMarker(latlng, navyColor);
-//                   }
-//               }
-//           }).addTo(map);
-//
-//         }
-//     });
-//   };
-// ------------------------------------------------------------
-
 //Step 2: Import GeoJSON data
 function getData(map){
     //load the data
@@ -136,9 +59,37 @@ function createPropSymbols(data, map){
               //Determine which attribute to visualize with proportional symbols
               var attribute = "year2015";
 
-              //create marker options
-              var options = {
-                  fillColor: "#ff7800",
+              var redColor = {
+                  fillColor: "#d73027",
+                  color: "#000",
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 0.8
+              };
+              // set new color
+              var orangeColor = {
+                  fillColor: "#fdae61",
+                  color: "#000",
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 0.8
+              };
+              var yellowColor = {
+                  fillColor: "#ffffbf",
+                  color: "#000",
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 0.8
+              };
+              var blueColor = {
+                  fillColor: "#abd9e9",
+                  color: "#000",
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 0.8
+              };
+              var navyColor = {
+                  fillColor: "#2c7bb6",
                   color: "#000",
                   weight: 1,
                   opacity: 1,
@@ -149,15 +100,32 @@ function createPropSymbols(data, map){
               var attValue = Number(feature.properties[attribute]);
 
               //Give each feature's circle marker a radius based on its attribute value
-              options.radius = calcPropRadius(attValue);
+              if (feature.properties.year2015 <= 20){
+                redColor.radius = calcPropRadius(attValue);
+                //create circle marker layer
+                var layer = L.circleMarker(latlng, redColor);
+              }
+              if (feature.properties.year2015 > 20 && feature.properties.year2015 <= 40){
+                orangeColor.radius = calcPropRadius(attValue);
+                var layer = L.circleMarker(latlng, orangeColor);
+              }
+              if (feature.properties.year2015 > 40 && feature.properties.year2015 <= 60){
+                yellowColor.radius = calcPropRadius(attValue);
+                var layer = L.circleMarker(latlng, yellowColor);
+              }
+              if (feature.properties.year2015 > 60 && feature.properties.year2015 <= 80){
+                blueColor.radius = calcPropRadius(attValue);
+                var layer = L.circleMarker(latlng, blueColor);
+              }
+              if (feature.properties.year2015 > 80 && feature.properties.year2015 <= 100){
+                navyColor.radius = calcPropRadius(attValue);
+                var layer = L.circleMarker(latlng, navyColor);
+              }
 
-              //create circle marker layer
-              var layer = L.circleMarker(latlng, options);
-
+//Lesson2
               //build popup content string
-              
               var popupContent = "<p><b>Country:</b> " + feature.properties.Country +
-              "</p><p><b>" + attribute + ":</b> " + feature.properties[attribute] + "</p>";
+              "</p><p><b>Percentage in 2015:</b> " + feature.properties[attribute] + "</p>";
 
               //bind the popup to the circle marker
               layer.bindPopup(popupContent);
@@ -171,27 +139,6 @@ function createPropSymbols(data, map){
 };
 
 
-
-
-// //Add circle markers for point features to the map
-// function createPropSymbols(data, map){
-//     //create a Leaflet GeoJSON layer and add it to the map
-//     L.geoJson(data, {
-//         pointToLayer: pointToLayer
-//     }).addTo(map);
-// };
-//
-// `Example 2.2: formatting the popups in main.js`
-// //build popup content string starting with city...Example 2.1 line 24
-//  var popupContent = "<p><b>City:</b> " + feature.properties.City + "</p>";
-//
-//  //add formatted attribute to popup content string
-//  var year = attribute.split("_")[1];
-//  popupContent += "<p><b>Population in " + year + ":</b> " +
-//  feature.properties[attribute] + " million</p>";
-//
-// `Implement well-formatted popups for the features on your Leaflet map.`
-//
 // `Example 2.4: using a title marker option in main.js`
 // //create marker layer...Example 2.1 line 21
 //     var layer = L.marker(latlng, {
