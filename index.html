@@ -18,8 +18,9 @@
           margin: 0;
         }
         html, body, #map {
-          height: 100%;
-          width: 100%;
+          /* height and width = 100% */
+          height: 800px;
+          width: 1500px;
         }
         </style>
 
@@ -30,8 +31,15 @@
 
     <body>
         <!--put your initial page content here-->
-        <div id="map"></div>
-        <div id="panel"></div>
+      <div id="map", style='height:650px'></div>
+      <div id="filter">
+        <div id="sliderPercent" style="font-family:Arial; font-size: 14pt; font-weight:bold"></div>
+      </div>
+      <div id="panel">
+        <div id="sliderYear" style="font-family:Arial; font-size: 14pt; font-weight:bold"></div>
+      </div>
+      <div id="reverse"></div>
+      <div id="forward"></div>
 
         <!--you can also use this space for internal scripts or stylesheets;
         place these within <script> or <style> tags-->

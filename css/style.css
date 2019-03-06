@@ -1,28 +1,20 @@
 /* Stylesheet by Jamp Vongkusolkit, 2019 */
 
-#mapid { height: 180px; }
-
-/* Example 2.3: adjusting popup content margins in style.css */
+/* adjusting popup content margins */
 .leaflet-popup-content p {
     margin: 0.2em 0;
 }
 
-/* Example 2.8: positioning the panel in style.css */
-/* #map {
-    height: 400px;
+/* positioning the panel */
+#map {
+    height: 200px;
     width: 80%;
     display: inline-block;
 }
 
-#panel {
-    width: 16%;
-    padding: 20px;
-    display: inline-block;
-    vertical-align: top;
-} */
 
-/* Example 3.7: styles for slider and buttons in style.css */
-/* #panel {
+/* styles for slider and buttons */
+#panel {
     width: 26%;
     padding: 20px;
     display: inline-block;
@@ -35,10 +27,17 @@
     width: 50%;
 }
 
-#forward {
-    float: right;
+
+
+#filter {
+    width: 26%;
+    padding: 20px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    line-height: 42px;
 }
 
-#reverse {
-    float: left;
-} */
+.filter-slider {
+    width: 50%;
+}
