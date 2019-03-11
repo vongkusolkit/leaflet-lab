@@ -7,11 +7,24 @@
 
 /* positioning the panel */
 #map {
-    height: 200px;
-    width: 80%;
+    height: 400px;
+    width: 100%;
     display: inline-block;
 }
 
+.sequence-control-container {
+    width: 350px;
+    height: 30px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 10px;
+    line-height: 45px;
+    text-align: center;
+    border: solid gray 1px;
+}
+
+.range-slider {
+    width: 200px;
+}
 
 /* styles for slider and buttons */
 #panel {

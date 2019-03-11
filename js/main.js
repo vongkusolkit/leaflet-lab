@@ -37,9 +37,10 @@ function getData(map){
             //call function to create proportional symbols, sequence
             // createSequenceControls(map);
             createPropSymbols(response, map, attributes);
+            // createIcons(response, map, attributes);
+
             createFilterControls(map, attributes);
             createSequenceControls(map, attributes);
-
         }
     });
 };
@@ -56,22 +57,62 @@ function calcPropRadius(attValue) {
     return radius;
 };
 
+// function createIcons(data, map, attributes) {
+//
+//   icons = L.geoJson(data, {
+//     iconToLayer: function(feature, latlng){
+//       console.log("here")
+//
+//         return iconToLayer(feature, latlng, attributes);
+//
+//         }
+//     }).addTo(map);
+//
+// };
+
+// function iconToLayer(feature, latlng, attributes){
+//   var LeafIcon = L.Icon.extend({
+//     options: {}
+//   });
+//   var lightestBlueIcon = new LeafIcon({iconUrl: 'img/saddest.png', iconSize: [38]});
+//   return lightestBlueIcon;
+// }
+
 
 // add circle markers for point features to the map
 function createPropSymbols(data, map, attributes){
     // create a Leaflet GeoJSON layer and add it to the map
-      marker = L.geoJson(data, {
-        pointToLayer: function(feature, latlng){
-            return pointToLayer(feature, latlng, attributes);
-        }
-    }).addTo(map);
+
+  circles = L.geoJson(data, {
+    pointToLayer: function(feature, latlng){
+        return pointToLayer(feature, latlng, attributes);
+      }
+  }).addTo(map);
+
+
+
+
+
+
+
+
+    //L.marker(latlng, {icon: lightestBlueIcon}) .addTo(map);
 };
 
+
 function pointToLayer(feature, latlng, attributes) {
-  {
       // implementing popups in a named pointToLayer() function
       // create variables for markers
         var attribute = attributes[0];
+
+        var LeafIcon = L.Icon.extend({
+          options: {}
+        });
+        // 
+        // var lightestBlueIcon = new LeafIcon({iconUrl: 'img/saddest.png', iconSize: [38]});
+        // lightestBlue = L.marker(latlng, {icon: lightestBlueIcon})
+        // return lightestBlue
+        //
 
         var lightestBlue = {
             fillColor: "#f1eef6",
@@ -115,6 +156,7 @@ function pointToLayer(feature, latlng, attributes) {
 
         radius = 0
 
+
         //Give each feature's circle marker a radius based on its attribute value
         if (feature.properties.year2000 <= 20){
           lightestBlue.radius = calcPropRadius(attValue);
@@ -126,9 +168,8 @@ function pointToLayer(feature, latlng, attributes) {
           lightBlue.radius = calcPropRadius(attValue);
           radius = lightestBlue.radius
 
-          radius = lightestBlue.radius
-
           var layer = L.circleMarker(latlng, lightBlue);
+
         }
         if (feature.properties.year2000 > 40 && feature.properties.year2000 <= 60){
           blue.radius = calcPropRadius(attValue);
@@ -149,23 +190,16 @@ function pointToLayer(feature, latlng, attributes) {
 
         }
 
+        //Example 1.1 line 2...in pointToLayer()
+        createPopup(feature.properties, attribute, layer, radius);
 
-        //add country to popup content string
-        var popupContent = "<p><b>Country:</b> " + feature.properties.Country + "</p>";
+        //add popup to circle marker
 
-        //add formatted attribute to panel content string
-        var year = attribute.split("_")[1];
-        popupContent += "<p><b>Percentage in 2000:</b> " + feature.properties[attribute] + "</p>";
-
-        //layer popup to the circle marker
-        layer.bindPopup(popupContent, {
-            offset: new L.Point(0,-radius)
-        });
 
         //return the circle marker to the L.geoJson pointToLayer option
         // return layer;
         return layer;
-  }
+
 }
 
 
@@ -303,25 +337,38 @@ function updatePropSymbols(map, attribute, filter){
             // keep the point if equal to or less than filter level
             layer.setRadius(radius);
 
-            //add country to popup content string
-            var popupContent = "<p><b>Country:</b> " + props.Country + "</p>";
-
-            //add formatted attribute to panel content string
-            var year = attribute.split("_")[1];
-            year = attribute.substring(4);
-
-            popupContent += "<p><b>Percentage in "+ year + ":</b> " + layer.feature.properties[attribute] + "</p>";
-
-            //layer popup to the circle marker
-            layer.bindPopup(popupContent, {
-                offset: new L.Point(0,-radius)
-            });
+            //Example 1.1 line 2...in pointToLayer()
+            createPopup(props, attribute, layer, radius);
           }
 
           }
     });
 };
 
+//a consolidated popup-creation function
+function createPopup(properties, attribute, layer, radius){
+  if (layer.feature == null) {
+    var props = properties
+  } else {
+    var props = layer.feature.properties
+  }
+
+    //add city to popup content string
+    var popupContent = "<p><b>Country:</b> " + props.Country + "</p>";
+    console.log("here")
+    console.log(attribute)
+    //add formatted attribute to panel content string
+    var year = attribute.split("year")[1];
+    console.log(year)
+    popupContent += "<p><b>Percentage in "+ year + ":</b> " + props[attribute] + "</p>";
+
+    //replace the layer popup
+    layer.bindPopup(popupContent, {
+        offset: new L.Point(0,-radius)
+    });
+
+
+};
 
 
 
