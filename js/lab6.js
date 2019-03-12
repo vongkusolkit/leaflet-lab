@@ -1,90 +1,4 @@
 
-
-//a consolidated popup-creation function
-function createPopup(properties, attribute, layer, radius){
-    if (layer.feature.properties == null) {
-      var props = properties
-    } else {
-      var props = layer.feature.properties
-    }
-
-
-    //add city to popup content string
-    var popupContent = "<p><b>Country:</b> " + props.Country + "</p>";
-
-    //add formatted attribute to panel content string
-    var year = attribute.split("_")[1];
-    popupContent += "<p><b>Percentage in "+ year + ":</b> " + props[attribute] + "</p>";
-
-    //replace the layer popup
-    layer.bindPopup(popupContent, {
-        offset: new L.Point(0,-radius)
-    });
-
-    //Example 1.2 line 1...Popup constructor function
-    //creating new popup objects to bind popup message to current layer
-
-};
-
-function Popup(properties, attribute, layer, radius){
-    this.properties = properties;
-    this.attribute = attribute;
-    this.layer = layer;
-    this.year = attribute.split("_")[1];
-    this.population = this.properties[attribute];
-    this.content = "<p><b>City:</b> " + this.properties.City + "</p><p><b>Population in " + this.year + ":</b> " + this.population + " million</p>";
-
-    this.bindToLayer = function(){
-        this.layer.bindPopup(this.content, {
-            offset: new L.Point(0,-radius)
-        });
-    };
-};
-
-    //Example 1.2 line 1...Popup constructor function
-    //creating new popup objects to bind popup message to current layer
-    function Popup(properties, attribute, layer, radius){
-        this.properties = properties;
-        this.attribute = attribute;
-        this.layer = layer;
-        this.year = attribute.split("_")[1];
-        this.population = this.properties[attribute];
-        this.content = "<p><b>City:</b> " + this.properties.City + "</p><p><b>Population in " + this.year + ":</b> " + this.population + " million</p>";
-
-        this.bindToLayer = function(){
-            this.layer.bindPopup(this.content, {
-                offset: new L.Point(0,-radius)
-            });
-        };
-    };
-
-};
-
-
-//Example 1.3 line 1...in pointToLayer()
-//create new popup
-var popup = new Popup(feature.properties, attribute, layer, options.radius);
-
-//Example 1.1 line 2...in pointToLayer()
-createPopup(feature.properties, attribute, layer, options.radius);
-
-//add popup to circle marker
-popup.bindToLayer();
-
-...
-
-
-//Example 1.3 line 6...in UpdatePropSymbols()
-var popup = new Popup(props, attribute, layer, radius);
-
-//Example 1.1 line 18...in updatePropSymbols()
-createPopup(props, attribute, layer, radius);
-
-
-//add popup to circle marker
-popup.bindToLayer();
-
-
 //Example 1.4: replacing popup content in main.js
 //create new popup
 var popup = new Popup(feature.properties, attribute, layer, options.radius);
@@ -136,6 +50,15 @@ function createSequenceControls(map, attributes){
     });
 
     map.addControl(new SequenceControl());
+  }
+
+
+
+
+
+
+
+
 
 //Example 2.7: adding a legend control in main.js
 function createLegend(map, attributes){
@@ -156,6 +79,65 @@ function createLegend(map, attributes){
             //can do with Adobe Illustrator
             var svg = '<svg id="attribute-legend" width="180px" height="180px">';
 
+            //array of circle names to base loop on
+            //object to base loop on
+            // var circles = {
+            //     max: 20,
+            //     mean: 40,
+            //     min: 60
+            // };
+
+            var markers = [
+                darkestBlueIcon: 20,
+                darkBlueIcon: 40,
+                blueIcon: 60,
+                lightBlueIcon: 80,
+                lightestBlueIcon: 100
+            ];
+
+            var labels = [
+              'img/happiest.png',
+              'img/happy.png',
+              'img/content.png',
+              'img/sad.png',
+              'img/saddest.png'
+            ];
+
+            // //loop to add each circle and text to svg string
+            // for (var circle in circles){
+            //     //circle string
+            //     svg += '<circle class="legend-circle" id="' + circle + '" fill="#F47821" fill-opacity="0.8" stroke="#000000" cx="30"/>';
+            //
+            //     //text string
+            //     svg += '<text id="' + circle + '-text" x="65" y="' + circles[circle] + '"></text>';
+            // };
+            //
+            //
+            // //loop to add each circle and text to svg string
+            // for (var marker in markers){
+            //     //circle string
+            //     svg += '<circle class="legend-circle" id="' + circle + '" fill="#F47821" fill-opacity="0.8" stroke="#000000" cx="30"/>';
+            //
+            //     //text string
+            //     svg += '<text id="' + circle + '-text" x="65" y="' + circles[circle] + '"></text>';
+            // };
+
+            //loop to add each circle and text to svg string
+            for (var i = 0; i < markers.length; i++){
+                //circle string
+                svg += markers[i] + (" <img src="+ labels[i] +" height='50' width='50'>") +'<br>';
+    }
+            //     '<circle class="legend-circle" id="' + circle + '" fill="#F47821" fill-opacity="0.8" stroke="#000000" cx="30"/>';
+            //
+            //     //text string
+            //     svg += '<text id="' + circle + '-text" x="65" y="' + circles[circle] + '"></text>';
+            // };
+            //
+
+
+            //close svg string
+            svg += "</svg>";
+
             //add attribute legend svg to container
             $(container).append(svg);
 
@@ -167,3 +149,64 @@ function createLegend(map, attributes){
 
     updateLegend(map, attributes[0]);
 };
+
+
+//Calculate the max, mean, and min values for a given attribute
+function getMarkerValues(map, attribute){
+    //start with min at highest possible and max at lowest possible number
+    var min = Infinity,
+        max = -Infinity;
+
+    map.eachLayer(function(layer){
+        //get the attribute value
+        if (layer.feature){
+            var attributeValue = Number(layer.feature.properties[attribute]);
+
+            //test for min
+            if (attributeValue < min){
+                min = attributeValue;
+            };
+
+            //test for max
+            if (attributeValue > max){
+                max = attributeValue;
+            };
+        };
+    });
+
+    //set mean
+    var mean = (max + min) / 2;
+
+    //return values as an object
+    return {
+        max: max,
+        mean: mean,
+        min: min
+    };
+};
+
+//Example 3.7 line 1...Update the legend with new attribute
+function updateLegend(map, attribute){
+    //create content for legend
+    var year = attribute.split("_")[1];
+    var content = "Year: " + sequenceLabel;
+
+    //replace legend content
+    $('#temporal-legend').html(content);
+
+    //get the max, mean, and min values as an object
+    var markerValues = getMarkerValues(map, attribute);
+};
+
+    for (var key in markerValues){
+        //get the radius
+        var radius = calcPropRadius(markerValues[key]);
+
+        $('#'+key).attr({
+            cy: 59 - radius,
+            r: radius
+        });
+
+        //Step 4: add legend text
+        $('#'+key+'-text').text(Math.round(markerValues[key]*100)/100 + " %");
+    };

@@ -12,6 +12,10 @@
     display: inline-block;
 }
 
+.range-slider {
+    width: 200px;
+}
+
 .sequence-control-container {
     width: 350px;
     height: 30px;
@@ -22,10 +26,37 @@
     border: solid gray 1px;
 }
 
-.range-slider {
-    width: 200px;
+.legend-control-container {
+  width: 350px;
+  height: 30px;
+  background-color: rgba(255,255,255,0.8);
+  padding: 10px;
+  line-height: 45px;
+  text-align: center;
+  border: solid gray 1px;
 }
 
+
+.filter-control-container {
+  width: 350px;
+  height: 30px;
+  background-color: rgba(255,255,255,0.8);
+  padding: 10px;
+  line-height: 45px;
+  text-align: center;
+  border: solid gray 1px;
+}
+
+
+.filter-legend-control-container {
+  width: 350px;
+  height: 30px;
+  background-color: rgba(255,255,255,0.8);
+  padding: 10px;
+  line-height: 45px;
+  text-align: center;
+  border: solid gray 1px;
+}
 /* styles for slider and buttons */
 #panel {
     width: 26%;
@@ -34,10 +65,6 @@
     vertical-align: top;
     text-align: center;
     line-height: 42px;
-}
-
-.range-slider {
-    width: 50%;
 }
 
 

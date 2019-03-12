@@ -41,6 +41,8 @@ function getData(map){
 
             createFilterControls(map, attributes);
             createSequenceControls(map, attributes);
+            createLegend(map, attributes);
+            createFilterLegend(map, attributes)
         }
     });
 };
@@ -57,27 +59,6 @@ function calcPropRadius(attValue) {
     return radius;
 };
 
-// function createIcons(data, map, attributes) {
-//
-//   icons = L.geoJson(data, {
-//     iconToLayer: function(feature, latlng){
-//       console.log("here")
-//
-//         return iconToLayer(feature, latlng, attributes);
-//
-//         }
-//     }).addTo(map);
-//
-// };
-
-// function iconToLayer(feature, latlng, attributes){
-//   var LeafIcon = L.Icon.extend({
-//     options: {}
-//   });
-//   var lightestBlueIcon = new LeafIcon({iconUrl: 'img/saddest.png', iconSize: [38]});
-//   return lightestBlueIcon;
-// }
-
 
 // add circle markers for point features to the map
 function createPropSymbols(data, map, attributes){
@@ -88,15 +69,6 @@ function createPropSymbols(data, map, attributes){
         return pointToLayer(feature, latlng, attributes);
       }
   }).addTo(map);
-
-
-
-
-
-
-
-
-    //L.marker(latlng, {icon: lightestBlueIcon}) .addTo(map);
 };
 
 
@@ -108,90 +80,43 @@ function pointToLayer(feature, latlng, attributes) {
         var LeafIcon = L.Icon.extend({
           options: {}
         });
-        // 
-        // var lightestBlueIcon = new LeafIcon({iconUrl: 'img/saddest.png', iconSize: [38]});
-        // lightestBlue = L.marker(latlng, {icon: lightestBlueIcon})
-        // return lightestBlue
-        //
 
-        var lightestBlue = {
-            fillColor: "#f1eef6",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
-        // set new color
-        var lightBlue = {
-            fillColor: "#bdc9e1",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
-        var blue = {
-            fillColor: "#74a9cf",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
-        var darkBlue = {
-            fillColor: "#2b8cbe",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
-        var darkestBlue = {
-            fillColor: "#045a8d",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
 
         //For each feature, determine its value for the selected attribute
         var attValue = Number(feature.properties[attribute]);
 
-        radius = 0
+        radius = calcPropRadius(attValue);
 
 
         //Give each feature's circle marker a radius based on its attribute value
         if (feature.properties.year2000 <= 20){
-          lightestBlue.radius = calcPropRadius(attValue);
-          radius = lightestBlue.radius
-          //create circle marker layer
-          var layer = L.circleMarker(latlng, lightestBlue);
+          var lightestBlueIcon = new LeafIcon({iconUrl: 'img/saddest.png', iconSize: [radius*2]});
+          layer = L.marker(latlng, {icon: lightestBlueIcon})
         }
+
         if (feature.properties.year2000 > 20 && feature.properties.year2000 <= 40){
-          lightBlue.radius = calcPropRadius(attValue);
-          radius = lightestBlue.radius
-
-          var layer = L.circleMarker(latlng, lightBlue);
-
+          var lightBlueIcon = new LeafIcon({iconUrl: 'img/sad.png', iconSize: [radius*2]});
+          layer = L.marker(latlng, {icon: lightBlueIcon})
         }
+
         if (feature.properties.year2000 > 40 && feature.properties.year2000 <= 60){
-          blue.radius = calcPropRadius(attValue);
-          radius = lightestBlue.radius
-
-          var layer = L.circleMarker(latlng, blue);
+          var blueIcon = new LeafIcon({iconUrl: 'img/content.png', iconSize: [radius*2]});
+          layer = L.marker(latlng, {icon: blueIcon})
         }
+
         if (feature.properties.year2000 > 60 && feature.properties.year2000 <= 80){
-          darkBlue.radius = calcPropRadius(attValue);
-          radius = lightestBlue.radius
-
-          var layer = L.circleMarker(latlng, darkBlue);
+          var darkBlueIcon = new LeafIcon({iconUrl: 'img/happy.png', iconSize: [radius*2]});
+          layer = L.marker(latlng, {icon: darkBlueIcon})
         }
+
         if (feature.properties.year2000 > 80 && feature.properties.year2000 <= 100){
-          darkestBlue.radius = calcPropRadius(attValue);
-          var layer = L.circleMarker(latlng, darkestBlue);
-          radius = lightestBlue.radius
+          var darkestBlueIcon = new LeafIcon({iconUrl: 'img/happiest.png', iconSize: [radius*2]});
+          layer = L.marker(latlng, {icon: darkestBlueIcon})
 
         }
 
         //Example 1.1 line 2...in pointToLayer()
-        createPopup(feature.properties, attribute, layer, radius);
+        // createPopup(feature.properties, attribute, layer, radius);
 
         //add popup to circle marker
 
@@ -207,86 +132,90 @@ function pointToLayer(feature, latlng, attributes) {
 function createSequenceControls(map, attributes){
   // adding slider attributes in main.js
   // create range input element (slider)
-      $('#panel').append('<input class="range-slider" type="range">');
+  var SequenceControl = L.Control.extend({
+      options: {
+          position: 'bottomleft'
+      },
+      onAdd: function (map) {
 
-       var index = 0
-       // click listener for buttons
-       $('.skip').click(function(){
-           //get the old index value
-           index = $('.range-slider').val();
-           curYear = index
-           console.log(index);
-           var sequenceLabel = String(attributes[index]).substring(4)
+        var container = L.DomUtil.create('div', 'sequence-control-container');
 
-           // increment or decrement depending on slider movement
-           if ($(this).attr('id') == 'forward'){
-               index++;
+        //$('#panel').append('<input class="range-slider" type="range">');
+        $(container).append('<input class="range-slider" type="range">');
+
+         var index = 0
+
+         var slider = container.getElementsByClassName('range-slider')
 
 
-               // if past the last attribute, wrap around to first attribute
-               index = index > 15 ? 0 : index;
-               curYear = index
-               $("#sliderYear").text("Year: " + sequenceLabel);
-               updatePropSymbols(map, attributes[index], curFilter);
-           } else if ($(this).attr('id') == 'reverse'){
-               index--;
+         // click listener for buttons
 
-               // if past the first attribute, wrap around to last attribute
-               index = index < 0 ? 15 : index;
-               curYear = index
-               $("#sliderYear").text("Year: " + sequenceLabel);
-               updatePropSymbols(map, attributes[index], curFilter);
+         // retrieving the value of the slider
+         $(slider).on('input', function(){
 
-           };
+             //Step 6: get the new index value
+            index = $(this).val();
+             curYear = index
+             // called in both skip button and slider event listener handlers
+              // pass new attribute to update symbols
+              var sequenceLabel = String(attributes[index]).substring(4)
+              // console.log($("#sliderYear"));
+              $("#sliderYear").text("Year: " + sequenceLabel);
+              $("#sYear").text("Year: " + sequenceLabel);
 
-           // update slider
-           $('.range-slider').val(index);
-       });
+              // console.log(index)
+              updatePropSymbols(map, attributes[index], curFilter);
+              updateLegend(map, attributes[index])
+         });
 
-       // retrieving the value of the slider
-       $('.range-slider').on('input', function(){
-           //Step 6: get the new index value
-          index = $(this).val();
-           curYear = index
+        //set slider attributes
+        $(slider).attr({
+            max: 15,
+            min: 0,
+            value: 0,
+            step: 1
+        });
 
-           // called in both skip button and slider event listener handlers
-            // pass new attribute to update symbols
-            var sequenceLabel = String(attributes[index]).substring(4)
+        var sequenceLabel = String(attributes[index]).substring(4)
 
-            $("#sliderYear").text("Year: " + sequenceLabel);
+        $("#sliderYear").text("Year: " + sequenceLabel);
 
-            updatePropSymbols(map, attributes[index], curFilter);
-       });
 
-      //set slider attributes
-      $('.range-slider').attr({
-          max: 15,
-          min: 0,
-          value: 0,
-          step: 1
-      });
-      var sequenceLabel = String(attributes[index]).substring(4)
+        L.DomEvent.disableClickPropagation(container);
 
-      $("#sliderYear").text("Year: " + sequenceLabel);
+        return container;
+      }
+    });
 
+      map.addControl(new SequenceControl());
 }
 
 function createFilterControls(map, attributes) {
-  // filter operator
+  var FilterControl = L.Control.extend({
+      options: {
+          position: 'bottomright'
+      },
 
-        $('#filter').append('<input class="filter-slider" type="range">');
-        $("#sliderPercent").text("Accessibility to safe drinking water: " + curFilter + "%");
+      onAdd: function (map) {
+          // create the control container with a particular class name
+          var container = L.DomUtil.create('div', 'filter-control-container');
 
-        $('.filter-slider').on('input', function(){
+
+        $(container).append('<input class="filter-slider" type="range">');
+        $(container).append('<div id="filter-legend">')
+
+        var filterslider = container.getElementsByClassName('filter-slider')
+
+        $(filterslider).on('input', function(){
             // get the new index value (filter level)
             var filter = $(this).val();
             curFilter = filter
-            $("#sliderPercent").text("Accessibility to safe drinking water: " + curFilter + "%");
+            $("#sliderPercent").text("Accessibility to safe drinking water less than " + curFilter + "%");
             updatePropSymbols(map, attributes[curYear], curFilter)
         });
 
        //set slider attributes
-       $('.filter-slider').attr({
+       $(filterslider).attr({
            max: 100,
            min: 0,
            value: 100,
@@ -294,7 +223,14 @@ function createFilterControls(map, attributes) {
        });
 
 
-};
+       L.DomEvent.disableClickPropagation(container);
+
+       return container;
+     }
+   });
+
+     map.addControl(new FilterControl());
+}
 
 
 // build an attributes array from the data
@@ -313,9 +249,6 @@ function processData(data){
         };
     };
 
-    //check result
-    // console.log(attributes);
-
     return attributes;
 };
 
@@ -328,22 +261,26 @@ function updatePropSymbols(map, attribute, filter){
           //access feature properties
           var props = layer.feature.properties;
 
+          var icon = layer.options.icon;
+
           //Check to see if country's water % at year (attribute) is greater than the filter level
           if (props[attribute] > filter) {
-            layer.setRadius(0)
+            icon.options.iconSize = [0];
+            layer.setIcon(icon);
+
           } else {
             // update each feature's radius based on new attribute values
             var radius = calcPropRadius(props[attribute]);
             // keep the point if equal to or less than filter level
-            layer.setRadius(radius);
+            icon.options.iconSize = [radius*2];
+            layer.setIcon(icon);
 
             //Example 1.1 line 2...in pointToLayer()
             createPopup(props, attribute, layer, radius);
           }
-
-          }
-    });
-};
+        }
+      });
+    };
 
 //a consolidated popup-creation function
 function createPopup(properties, attribute, layer, radius){
@@ -355,20 +292,176 @@ function createPopup(properties, attribute, layer, radius){
 
     //add city to popup content string
     var popupContent = "<p><b>Country:</b> " + props.Country + "</p>";
-    console.log("here")
-    console.log(attribute)
+
     //add formatted attribute to panel content string
     var year = attribute.split("year")[1];
-    console.log(year)
+
     popupContent += "<p><b>Percentage in "+ year + ":</b> " + props[attribute] + "</p>";
 
     //replace the layer popup
     layer.bindPopup(popupContent, {
         offset: new L.Point(0,-radius)
     });
-
-
 };
+
+//Example 2.7: adding a legend control in main.js
+function createLegend(map, attributes){
+    var LegendControl = L.Control.extend({
+        options: {
+            position: 'bottomleft'
+        },
+
+        onAdd: function (map) {
+            // create the control container with a particular class name
+            var container = L.DomUtil.create('div', 'legend-control-container');
+
+
+            //PUT YOUR SCRIPT TO CREATE THE TEMPORAL LEGEND HERE
+            //add temporal legend div to container
+            $(container).append('<div id="temporal-legend">')
+            //Step 1: start attribute legend svg string
+            //can do with Adobe Illustrator
+            var svg = '<svg id="attribute-legend" width="180px" height="180px">';
+
+            // array of circle names to base loop on
+            // object to base loop on
+            // var circles = {
+            //     max: 20,
+            //     mean: 40,
+            //     min: 60
+            // };
+
+            var markers = {
+                darkestBlueIcon: 20,
+                darkBlueIcon: 40,
+                blueIcon: 60,
+                lightBlueIcon: 80,
+                lightestBlueIcon: 100
+            };
+
+            var labels = [
+              'img/happiest.png',
+              'img/happy.png',
+              'img/content.png',
+              'img/sad.png',
+              'img/saddest.png'
+            ];
+
+            svg = (" <img src="+ labels[1] +" height='50' width='50'>") +'<br>';
+
+            //loop to add each circle and text to svg string
+            for (var i = 0; i < markers.length; i++){
+                //circle string
+                svg += markers[i] + (" <img src="+ labels[i] +" height='50' width='50'>") +'<br>';
+              }
+
+            //close svg string
+            svg += "</svg>";
+
+            //add attribute legend svg to container
+            var myElement = container.getElementsByTagName("div");
+            $(myElement).append(svg);
+            return container;
+        }
+    });
+    map.addControl(new LegendControl());
+    updateLegend(map, attributes[curYear]);
+};
+
+//Calculate the max, mean, and min values for a given attribute
+function getMarkerValues(map, attribute){
+    //start with min at highest possible and max at lowest possible number
+    var max = Infinity,
+        min = -Infinity;
+
+    map.eachLayer(function(layer){
+        //get the attribute value
+        if (layer.feature){
+            var attributeValue = Number(layer.feature.properties[attribute]);
+
+            //test for min
+            if (attributeValue < min){
+                min = attributeValue;
+            };
+
+            //test for max
+            if (attributeValue > max){
+                max = attributeValue;
+            };
+        };
+    });
+
+    //set mean
+    var mean = (max + min) / 2;
+
+    //return values as an object
+    return {
+        max: max,
+        mean: mean,
+        min: min
+    };
+};
+
+//Example 3.7 line 1...Update the legend with new attribute
+function updateLegend(map, attribute){
+    //create content for legend
+
+    var year = attribute.split("year")[1];
+    var content = "Year: " + year;
+
+    //replace legend content
+    $('#temporal-legend').html(content);
+    var markerValues = getMarkerValues(map, attribute);
+
+    for (var key in markerValues){
+        //get the radius
+        var radius = calcPropRadius(markerValues[key]);
+
+        $('#'+key).attr({
+            cy: 59 - radius,
+            r: radius
+        });
+
+        //Step 4: add legend text
+        $('#'+key+'-text').text(Math.round(markerValues[key]*100)/100 + " %");
+    };
+}
+    //get the max, mean, and min values as an object
+
+//Example 2.7: adding a legend control in main.js
+function createFilterLegend(map, attributes){
+    var FilterLegendControl = L.Control.extend({
+        options: {
+            position: 'bottomright'
+        },
+
+        onAdd: function (map) {
+            // create the control container with a particular class name
+            var container = L.DomUtil.create('div', 'filter-legend-control-container');
+            //PUT YOUR SCRIPT TO CREATE THE TEMPORAL LEGEND HERE
+            //add temporal legend div to container
+            $(container).append('<div id="filter-legend">')
+            console.log(container)
+
+            return container;
+        }
+    });
+    map.addControl(new FilterLegendControl());
+    updateFilterLegend(map, attributes[curYear]);
+};
+
+//Example 3.7 line 1...Update the legend with new attribute
+function updateFilterLegend(map, attribute){
+    //create content for legend
+    var filter = attribute
+    var content = "Accessibility to safe drinking water less than " + filter + "%"
+
+    //replace legend content
+    $('#filter-legend').html(content);
+
+        //Step 4: add legend text
+}
+        //g
 
 
 
