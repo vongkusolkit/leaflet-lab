@@ -7,77 +7,58 @@
 
 /* positioning the panel */
 #map {
-    height: 400px;
+    height: 100%;
     width: 100%;
     display: inline-block;
 }
 
-.range-slider {
-    width: 200px;
-}
-
-.sequence-control-container {
-    width: 350px;
-    height: 30px;
-    background-color: rgba(255,255,255,0.8);
-    padding: 10px;
-    line-height: 45px;
-    text-align: center;
-    border: solid gray 1px;
-}
-
 .legend-control-container {
-  width: 350px;
-  height: 30px;
-  background-color: rgba(255,255,255,0.8);
+  color: #FFFFFF;
+  width: 200px;
+  background-color: rgba(255,255,255,0.1);
+  outline: 2px solid white;
   padding: 10px;
-  line-height: 45px;
   text-align: center;
-  border: solid gray 1px;
+  bottom: 0;
+  left: 0;
+  border: solid black 1px;
+  display: table-cell;
+  white-space: nowrap;
+  font-family: Arial;
+  font-weight: bold;
+
 }
 
 
 .filter-control-container {
-  width: 350px;
-  height: 30px;
-  background-color: rgba(255,255,255,0.8);
+  color: #FFFFFF;
+  width: 500px;
+  height: 80px;
+  background-color: rgba(255,255,255,0.1);
+  outline: 2px solid white;
   padding: 10px;
   line-height: 45px;
   text-align: center;
-  border: solid gray 1px;
+  border: solid black 1px;
+  white-space: nowrap;
+  font-weight: bold;
+  font-size: 16px;
 }
 
+.title-control-container {
+  color: #045a8d;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #a6bddb;
+  font-size: 90px;
+  font-weight: bold;
 
-.filter-legend-control-container {
-  width: 350px;
-  height: 30px;
-  background-color: rgba(255,255,255,0.8);
-  padding: 10px;
-  line-height: 45px;
-  text-align: center;
-  border: solid gray 1px;
-}
-/* styles for slider and buttons */
-#panel {
-    width: 26%;
-    padding: 20px;
-    display: inline-block;
-    vertical-align: top;
-    text-align: center;
-    line-height: 42px;
 }
 
 
 
-#filter {
-    width: 26%;
-    padding: 20px;
-    display: inline-block;
-    vertical-align: top;
-    text-align: center;
-    line-height: 42px;
+.range-slider: {
+  width: 90%
 }
-
 .filter-slider {
-    width: 50%;
+    width: 70%;
 }

@@ -24,33 +24,30 @@ popup2.bindToLayer();
 
 console.log(popup.content) //original popup content
 
-//Example 2.2: custom control class in main.js
-//Create new sequence controls
-function createSequenceControls(map, attributes){
-    var SequenceControl = L.Control.extend({
-        options: {
-            position: 'bottomleft'
-        },
 
-        //only triggered after call map.addControl(new SequenceControl())
-        //have to put it after?
-        onAdd: function (map) {
-            // create the control container div with a particular class name
-            var container = L.DomUtil.create('div', 'sequence-control-container');
 
-            // ... initialize other DOM elements, add listeners, etc.
-            //create range input element (slider)
-            $(container).append('<input class="range-slider" type="range">');
 
-            //disable any mouse event listeners for the container
-            L.DomEvent.disableClickPropagation(container);
+//Example 3.7 line 1...Update the legend with new attribute
 
-            return container;
-        }
-    });
 
-    map.addControl(new SequenceControl());
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

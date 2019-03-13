@@ -1,15 +1,15 @@
 /* Map of GeoJSON data from drinkingwater.geojson */
 
-// variables for sequencing sliders
-var curYear = 0
+// Global variables to keep track of the current year index and filter
+var curYearIndex = 0
 var curFilter = 100
 
 // function to instantiate the Leaflet map
 function createMap(){
     // create the map
     var map = L.map('map', {
-        center: [20, 0],
-        zoom: 2
+        center: [-3, 20],
+        zoom: 2.6
     });
 
     // add base tilelayer
@@ -17,10 +17,9 @@ function createMap(){
       attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     	subdomains: 'abcd',
     	minZoom: 2,
-    	maxZoom: 20,
+    	maxZoom: 5,
     	ext: 'png'
     }).addTo(map);
-
 
     // call getData function
     getData(map);
@@ -34,15 +33,14 @@ function getData(map){
         success: function(response){
             //creating a variable to hold the attributes array
             var attributes = processData(response);
-            //call function to create proportional symbols, sequence
-            // createSequenceControls(map);
+            //call function to create proportional symbols
             createPropSymbols(response, map, attributes);
-            // createIcons(response, map, attributes);
-
+            //Create control for % filter
             createFilterControls(map, attributes);
-            createSequenceControls(map, attributes);
-            createLegend(map, attributes);
-            createFilterLegend(map, attributes)
+            //Create control for year sequences
+            createSequenceControls(map, attributes, response);
+            //create title
+            createTitle(map);
         }
     });
 };
@@ -55,117 +53,112 @@ function calcPropRadius(attValue) {
     var area = attValue * scaleFactor;
     // radius calculated based on area
     var radius = Math.sqrt(area/Math.PI);
-
     return radius;
 };
 
 
-// add circle markers for point features to the map
+// add custom icons to the map
 function createPropSymbols(data, map, attributes){
     // create a Leaflet GeoJSON layer and add it to the map
-
   circles = L.geoJson(data, {
     pointToLayer: function(feature, latlng){
+      //Get the icon points (to add to the map)
         return pointToLayer(feature, latlng, attributes);
       }
   }).addTo(map);
 };
 
-
+//gets custom icons and popup info
 function pointToLayer(feature, latlng, attributes) {
       // implementing popups in a named pointToLayer() function
       // create variables for markers
         var attribute = attributes[0];
-
+      //Leaficon object
         var LeafIcon = L.Icon.extend({
           options: {}
         });
-
-
         //For each feature, determine its value for the selected attribute
         var attValue = Number(feature.properties[attribute]);
-
+        //Get the radius, which is value corresponding to the attribute value
         radius = calcPropRadius(attValue);
 
-
-        //Give each feature's circle marker a radius based on its attribute value
+        //Give each feature's icon a size and image based on its attribute value
         if (feature.properties.year2000 <= 20){
-          var lightestBlueIcon = new LeafIcon({iconUrl: 'img/saddest.png', iconSize: [radius*2]});
+          var lightestBlueIcon = new LeafIcon({iconUrl: 'img/saddest.png', iconSize: [radius*1.25]});
           layer = L.marker(latlng, {icon: lightestBlueIcon})
         }
 
         if (feature.properties.year2000 > 20 && feature.properties.year2000 <= 40){
-          var lightBlueIcon = new LeafIcon({iconUrl: 'img/sad.png', iconSize: [radius*2]});
+          var lightBlueIcon = new LeafIcon({iconUrl: 'img/sad.png', iconSize: [radius*1.25]});
           layer = L.marker(latlng, {icon: lightBlueIcon})
         }
 
         if (feature.properties.year2000 > 40 && feature.properties.year2000 <= 60){
-          var blueIcon = new LeafIcon({iconUrl: 'img/content.png', iconSize: [radius*2]});
+          var blueIcon = new LeafIcon({iconUrl: 'img/content.png', iconSize: [radius*1.25]});
           layer = L.marker(latlng, {icon: blueIcon})
         }
 
         if (feature.properties.year2000 > 60 && feature.properties.year2000 <= 80){
-          var darkBlueIcon = new LeafIcon({iconUrl: 'img/happy.png', iconSize: [radius*2]});
+          var darkBlueIcon = new LeafIcon({iconUrl: 'img/happy.png', iconSize: [radius*1.25]});
           layer = L.marker(latlng, {icon: darkBlueIcon})
         }
 
         if (feature.properties.year2000 > 80 && feature.properties.year2000 <= 100){
-          var darkestBlueIcon = new LeafIcon({iconUrl: 'img/happiest.png', iconSize: [radius*2]});
+          var darkestBlueIcon = new LeafIcon({iconUrl: 'img/happiest.png', iconSize: [radius*1.25]});
           layer = L.marker(latlng, {icon: darkestBlueIcon})
 
         }
 
-        //Example 1.1 line 2...in pointToLayer()
-        // createPopup(feature.properties, attribute, layer, radius);
+        //Create variable containing year and its attribute value for a certain country
+        var props = feature.properties;
+        //Create popup info based on the year and the country
+        createPopup(props, attribute, layer, radius);
 
-        //add popup to circle marker
-
-
-        //return the circle marker to the L.geoJson pointToLayer option
-        // return layer;
         return layer;
-
 }
 
 
-// create new sequence controls
-function createSequenceControls(map, attributes){
-  // adding slider attributes in main.js
-  // create range input element (slider)
+//create new sequence controls to control the years
+function createSequenceControls(map, attributes, features){
+  //Create a SequenceControl object
   var SequenceControl = L.Control.extend({
       options: {
           position: 'bottomleft'
       },
       onAdd: function (map) {
+        //Create a DOM container to append to on to the map
+        var container = L.DomUtil.create('div', 'legend-control-container');
+        //Append the year info
+        $(container).append('<div id="temporal-legend" >Year: 2000</div>')
 
-        var container = L.DomUtil.create('div', 'sequence-control-container');
+        //Append the attribute value info
+        info = ("<p id = 'allVals'>Max: 100 || Mean: 54.20 || Min: 8.40</p>")
+        $(container).append(info);        //$('#panel').append('<input class="range-slider" type="range">');
 
-        //$('#panel').append('<input class="range-slider" type="range">');
+        //Append the legend symbols
+        image1 = ("<img id = 'raindropmax' src = img/happiest.png height='1000' width='45' > </img>")
+        image2 = ("<img id = 'raindropmean' src = img/content.png height='1' width='1' > </img>")
+        image3 = ("<img id = 'raindropmin' src = img/saddest.png height='1' width='1' > </img> </br>")
+        $(container).append(image1);
+        $(container).append(image2);
+        $(container).append(image3);
+
+        //Append the slider to control the year
         $(container).append('<input class="range-slider" type="range">');
 
+        //Initialize the slider value to 0
          var index = 0
-
+         //Get the slider html object
          var slider = container.getElementsByClassName('range-slider')
-
-
-         // click listener for buttons
-
-         // retrieving the value of the slider
+         //retrieving the value of the slider
          $(slider).on('input', function(){
-
-             //Step 6: get the new index value
+             //get the new index value
             index = $(this).val();
-             curYear = index
-             // called in both skip button and slider event listener handlers
-              // pass new attribute to update symbols
-              var sequenceLabel = String(attributes[index]).substring(4)
-              // console.log($("#sliderYear"));
-              $("#sliderYear").text("Year: " + sequenceLabel);
-              $("#sYear").text("Year: " + sequenceLabel);
-
-              // console.log(index)
+            //Update the global year index value so the attribute filter can adjust accordingly
+             curYearIndex = index
+              //Update the symbols and legend on the map
               updatePropSymbols(map, attributes[index], curFilter);
-              updateLegend(map, attributes[index])
+              updateLegend(map, attributes[index]);
          });
 
         //set slider attributes
@@ -175,19 +168,20 @@ function createSequenceControls(map, attributes){
             value: 0,
             step: 1
         });
-
-        var sequenceLabel = String(attributes[index]).substring(4)
-
-        $("#sliderYear").text("Year: " + sequenceLabel);
-
-
+        //Prevent the mouse to move the map when moving the slider
         L.DomEvent.disableClickPropagation(container);
 
         return container;
       }
     });
 
-      map.addControl(new SequenceControl());
+    //create the raindrops for the legend
+    map.addControl(new SequenceControl());
+    initialVal={min: 8.55, mean: 54.27, max: 100};
+    for (key in initialVal) {
+      var radius = calcPropRadius(initialVal[key]) * 1.25;
+      $('#raindrop'+key).attr('width', radius*0.9).attr('height', radius*1.25);
+    }
 }
 
 function createFilterControls(map, attributes) {
@@ -197,21 +191,24 @@ function createFilterControls(map, attributes) {
       },
 
       onAdd: function (map) {
-          // create the control container with a particular class name
-          var container = L.DomUtil.create('div', 'filter-control-container');
+        // create the control container with a particular class name
+        var container = L.DomUtil.create('div', 'filter-control-container');
 
-
+        //Add legend title
+        $(container).append('<div id="filter-legend">Accessibility to safe drinking water less than 100%</div>')
         $(container).append('<input class="filter-slider" type="range">');
-        $(container).append('<div id="filter-legend">')
 
+        //get the filterslider html object
         var filterslider = container.getElementsByClassName('filter-slider')
-
+        //get the input value of the slider
         $(filterslider).on('input', function(){
             // get the new index value (filter level)
             var filter = $(this).val();
+            //update the global filter value so the years will act appropriately
             curFilter = filter
-            $("#sliderPercent").text("Accessibility to safe drinking water less than " + curFilter + "%");
-            updatePropSymbols(map, attributes[curYear], curFilter)
+            //update the maps icons and legend
+            updatePropSymbols(map, attributes[curYearIndex], curFilter)
+            updateFilterLegend(map)
         });
 
        //set slider attributes
@@ -222,14 +219,14 @@ function createFilterControls(map, attributes) {
            step: 20
        });
 
-
+       //prevent the map to be moved from the mouse when adjusting the slider
        L.DomEvent.disableClickPropagation(container);
 
        return container;
      }
    });
-
-     map.addControl(new FilterControl());
+   //add filter slider to map
+   map.addControl(new FilterControl());
 }
 
 
@@ -237,10 +234,8 @@ function createFilterControls(map, attributes) {
 function processData(data){
     //empty array to hold attributes
     var attributes = [];
-
     //properties of the first feature in the dataset
     var properties = data.features[0].properties;
-
     //push each attribute name into attributes array
     for (var attribute in properties){
         //only take attributes with percentage values
@@ -248,152 +243,80 @@ function processData(data){
             attributes.push(attribute);
         };
     };
-
     return attributes;
 };
 
 // resize proportional symbols according to new attribute values
 function updatePropSymbols(map, attribute, filter){
     map.eachLayer(function(layer){
-
       // checking to see if layer.feature and layer.feature.properties exist
       if (layer.feature && layer.feature.properties[attribute]){
-          //access feature properties
+          //variable for feature properties
           var props = layer.feature.properties;
-
+          //variable for icon
           var icon = layer.options.icon;
 
           //Check to see if country's water % at year (attribute) is greater than the filter level
           if (props[attribute] > filter) {
+            //hide the icon
             icon.options.iconSize = [0];
             layer.setIcon(icon);
-
           } else {
             // update each feature's radius based on new attribute values
             var radius = calcPropRadius(props[attribute]);
             // keep the point if equal to or less than filter level
-            icon.options.iconSize = [radius*2];
+            icon.options.iconSize = [radius*1.25];
             layer.setIcon(icon);
-
-            //Example 1.1 line 2...in pointToLayer()
+            //add appropriate popup info to the new layer
             createPopup(props, attribute, layer, radius);
           }
         }
       });
     };
 
-//a consolidated popup-creation function
+//a create and add popup info to the icon
 function createPopup(properties, attribute, layer, radius){
+
+  //if layer exist, get appropriate values from the layer. otherwise get it from properties
   if (layer.feature == null) {
     var props = properties
   } else {
     var props = layer.feature.properties
   }
-
-    //add city to popup content string
+    //add country to popup content string
     var popupContent = "<p><b>Country:</b> " + props.Country + "</p>";
-
-    //add formatted attribute to panel content string
+    //add formatted attribute (year) to panel content string
     var year = attribute.split("year")[1];
-
-    popupContent += "<p><b>Percentage in "+ year + ":</b> " + props[attribute] + "</p>";
-
+    value = props[attribute].toFixed(2)
+    popupContent += "<p><b>Percentage in "+ year + ":</b> " + value + "</p>";
     //replace the layer popup
     layer.bindPopup(popupContent, {
         offset: new L.Point(0,-radius)
     });
 };
 
-//Example 2.7: adding a legend control in main.js
-function createLegend(map, attributes){
-    var LegendControl = L.Control.extend({
-        options: {
-            position: 'bottomleft'
-        },
-
-        onAdd: function (map) {
-            // create the control container with a particular class name
-            var container = L.DomUtil.create('div', 'legend-control-container');
-
-
-            //PUT YOUR SCRIPT TO CREATE THE TEMPORAL LEGEND HERE
-            //add temporal legend div to container
-            $(container).append('<div id="temporal-legend">')
-            //Step 1: start attribute legend svg string
-            //can do with Adobe Illustrator
-            var svg = '<svg id="attribute-legend" width="180px" height="180px">';
-
-            // array of circle names to base loop on
-            // object to base loop on
-            // var circles = {
-            //     max: 20,
-            //     mean: 40,
-            //     min: 60
-            // };
-
-            var markers = {
-                darkestBlueIcon: 20,
-                darkBlueIcon: 40,
-                blueIcon: 60,
-                lightBlueIcon: 80,
-                lightestBlueIcon: 100
-            };
-
-            var labels = [
-              'img/happiest.png',
-              'img/happy.png',
-              'img/content.png',
-              'img/sad.png',
-              'img/saddest.png'
-            ];
-
-            svg = (" <img src="+ labels[1] +" height='50' width='50'>") +'<br>';
-
-            //loop to add each circle and text to svg string
-            for (var i = 0; i < markers.length; i++){
-                //circle string
-                svg += markers[i] + (" <img src="+ labels[i] +" height='50' width='50'>") +'<br>';
-              }
-
-            //close svg string
-            svg += "</svg>";
-
-            //add attribute legend svg to container
-            var myElement = container.getElementsByTagName("div");
-            $(myElement).append(svg);
-            return container;
-        }
-    });
-    map.addControl(new LegendControl());
-    updateLegend(map, attributes[curYear]);
-};
 
 //Calculate the max, mean, and min values for a given attribute
-function getMarkerValues(map, attribute){
+function getIconValues(map, attribute, all_attributes){
     //start with min at highest possible and max at lowest possible number
-    var max = Infinity,
-        min = -Infinity;
-
+    var max = -Infinity,
+        min = Infinity;
     map.eachLayer(function(layer){
         //get the attribute value
         if (layer.feature){
             var attributeValue = Number(layer.feature.properties[attribute]);
-
             //test for min
             if (attributeValue < min){
                 min = attributeValue;
             };
-
             //test for max
             if (attributeValue > max){
                 max = attributeValue;
             };
         };
     });
-
     //set mean
     var mean = (max + min) / 2;
-
     //return values as an object
     return {
         max: max,
@@ -402,67 +325,58 @@ function getMarkerValues(map, attribute){
     };
 };
 
-//Example 3.7 line 1...Update the legend with new attribute
+//Update the legend with new attribute
 function updateLegend(map, attribute){
-    //create content for legend
-
+    //create content for legend (year info)
     var year = attribute.split("year")[1];
     var content = "Year: " + year;
-
     //replace legend content
     $('#temporal-legend').html(content);
-    var markerValues = getMarkerValues(map, attribute);
-
-    for (var key in markerValues){
-        //get the radius
-        var radius = calcPropRadius(markerValues[key]);
-
-        $('#'+key).attr({
-            cy: 59 - radius,
-            r: radius
-        });
-
-        //Step 4: add legend text
-        $('#'+key+'-text').text(Math.round(markerValues[key]*100)/100 + " %");
+    //get the min, mean, and max attribute values of all the current icons
+    var iconValues = getIconValues(map, attribute);
+    //console.log(iconValues);
+    for (var key in iconValues){
+        //get values to help scale the icon appropriately
+        var scale = calcPropRadius(iconValues[key]) * 1.25;
+        //get the values for the legend
+        maxStr = iconValues['max'].toString()
+        meanStr = iconValues['mean'].toFixed(2).toString()
+        minStr = iconValues['min'].toFixed(2).toString()
+        //adjust the raindrop image size on the legend
+        $('#raindrop'+key).attr('width', scale*0.9).attr('height', scale*1.25);
+        //adjust the values for the legend
+        $('#allVals').text("Max: "+ maxStr + " || Mean: " + meanStr+ " || Min: " + minStr);
     };
 }
-    //get the max, mean, and min values as an object
 
-//Example 2.7: adding a legend control in main.js
-function createFilterLegend(map, attributes){
-    var FilterLegendControl = L.Control.extend({
-        options: {
-            position: 'bottomright'
-        },
-
-        onAdd: function (map) {
-            // create the control container with a particular class name
-            var container = L.DomUtil.create('div', 'filter-legend-control-container');
-            //PUT YOUR SCRIPT TO CREATE THE TEMPORAL LEGEND HERE
-            //add temporal legend div to container
-            $(container).append('<div id="filter-legend">')
-            console.log(container)
-
-            return container;
-        }
-    });
-    map.addControl(new FilterLegendControl());
-    updateFilterLegend(map, attributes[curYear]);
-};
-
-//Example 3.7 line 1...Update the legend with new attribute
-function updateFilterLegend(map, attribute){
+//update the legend info
+function updateFilterLegend(map){
     //create content for legend
-    var filter = attribute
-    var content = "Accessibility to safe drinking water less than " + filter + "%"
-
+    var content = "Accessibility to safe drinking water less than " + curFilter + "%"
     //replace legend content
     $('#filter-legend').html(content);
-
-        //Step 4: add legend text
 }
-        //g
 
+//create and add the title to the leaflet map
+function createTitle(map) {
 
+  //create title object
+  var mapTitle = L.Control.extend({
+      options: {
+          position: 'topright'
+      },
 
+      onAdd: function (map) {
+          //add the title to the map
+          var container = L.DomUtil.create('div', 'title-control-container');
+          $(container).append('<div>Got Agua?')
+
+       return container;
+     }
+   });
+    //Add the title to the map
+     map.addControl(new mapTitle());
+}
+
+//Creates the map to the html page
 $(document).ready(createMap);
