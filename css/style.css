@@ -15,7 +15,7 @@
 .legend-control-container {
   color: #FFFFFF;
   width: 200px;
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(0,0,0,0.6);
   outline: 2px solid white;
   padding: 10px;
   text-align: center;
@@ -32,9 +32,9 @@
 
 .filter-control-container {
   color: #FFFFFF;
-  width: 500px;
+  width: 400px;
   height: 80px;
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(0,0,0,0.6);
   outline: 2px solid white;
   padding: 10px;
   line-height: 45px;

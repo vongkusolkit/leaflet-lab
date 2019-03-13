@@ -9,7 +9,7 @@ function createMap(){
     // create the map
     var map = L.map('map', {
         center: [-3, 20],
-        zoom: 2.6
+        zoom: 2
     });
 
     // add base tilelayer
